@@ -1,0 +1,19 @@
+network:
+  projection_head:
+    mlp_hidden_size: 512
+    projection_size: 128
+
+trainer:
+  batch_size: 128
+  m: 0.996 # momentum update
+  checkpoint_interval: 5000
+  temp: 0.07
+  max_epochs: 500
+  num_workers: 4
+  loss: 'dcl'
+
+optimizer:
+  params:
+    lr: 0.03
+#    momentum: 0.9
+    weight_decay: 0.0004
