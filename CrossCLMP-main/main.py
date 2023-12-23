@@ -24,13 +24,13 @@ def CrossCLMP_main():
     Unlabel_Rate = 0.05
 
     pan_np = imread('/path/to/pan.tif')
-    print('原始pan图的形状;', np.shape(pan_np))
+    print('The shape of the original pan:', np.shape(pan_np))
 
     ms4_np = imread('/path/to/ms4.tif')
-    print('原始ms4图的形状：', np.shape(ms4_np))
+    print('The shape of the original MS:', np.shape(ms4_np))
 
     label_np = np.load("/path/to/label.npy")
-    print('label数组形状：', np.shape(label_np))
+    print('The shape of the label：', np.shape(label_np))
 
     Ms4_patch_size = 16
 
@@ -39,13 +39,13 @@ def CrossCLMP_main():
     top_size, bottom_size, left_size, right_size = (int(Ms4_patch_size / 2 - 1), int(Ms4_patch_size / 2),
                                                     int(Ms4_patch_size / 2 - 1), int(Ms4_patch_size / 2))
     ms4_np = cv2.copyMakeBorder(ms4_np, top_size, bottom_size, left_size, right_size, Interpolation)
-    print('补零后的ms4图的形状：', np.shape(ms4_np))
+    print('The shape of the MS picture after padding', np.shape(ms4_np))
 
     Pan_patch_size = Ms4_patch_size * 4
     top_size, bottom_size, left_size, right_size = (int(Pan_patch_size / 2 - 4), int(Pan_patch_size / 2),
                                                     int(Pan_patch_size / 2 - 4), int(Pan_patch_size / 2))
     pan_np = cv2.copyMakeBorder(pan_np, top_size, bottom_size, left_size, right_size, Interpolation)
-    print('补零后的pan图的形状：', np.shape(pan_np))
+    print('The shape of the PAN picture after padding', np.shape(pan_np))
 
     # label_np=label_np.astype(np.uint8)
     label_np = label_np - 1
