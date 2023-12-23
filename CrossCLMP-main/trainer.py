@@ -105,7 +105,6 @@ class Trainer:
                 batch_md2_view2 = batch_md2_view2.to(self.device)
 
                 if niter == 0:
-                    # 将图片拼接起来 横着拼接 用于写log
                     grid = torchvision.utils.make_grid(batch_md1_view1[:32])
                     self.writer.add_image('batch_md1_view1', grid, global_step=niter)
 
@@ -168,7 +167,6 @@ class Trainer:
 
         self.save_model(os.path.join(model_checkpoints_folder, 'model.pth'))
 
-    # 模态1支路的loss计算
     def update1(self, batch_view_1, batch_view_2):
         online_from_view_1, orth_online_from_view_1 = self.online_network1(batch_view_1)
         predictions_from_view_1 = self.predictor1(online_from_view_1)
