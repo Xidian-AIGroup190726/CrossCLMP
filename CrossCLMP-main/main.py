@@ -137,13 +137,11 @@ def CrossCLMP_main():
 
     print('train：', len(label_train))
 
-    # 数据归一化
     ms4 = to_tensor(ms4_np)
     pan = to_tensor(pan_np)
     pan = np.expand_dims(pan, axis=0)
     ms4 = np.array(ms4).transpose((2, 0, 1))
 
-    # 转换类型
     ms4 = torch.from_numpy(ms4).type(torch.FloatTensor)
     pan = torch.from_numpy(pan).type(torch.FloatTensor)
 
@@ -162,7 +160,7 @@ def CrossCLMP_main():
                         **config['network']['projection_head']).to(device)
     predictor2 = MLPHead(in_channels=online_network2.g2[3].out_features,
                         **config['network']['projection_head']).to(device)
-    # 正交支路也需要predictor做正负样本动态调节
+    
     predictor1_orth = MLPHead(in_channels=online_network1.g1[3].out_features,
                         **config['network']['projection_head']).to(device)
     predictor2_orth = MLPHead(in_channels=online_network2.g2[3].out_features,
