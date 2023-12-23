@@ -60,35 +60,35 @@ BATCH_SIZE = 128
 EPOCH = 35
 
 pan_np = imread('/path/to/pan.tif')
-print('原始pan图的形状;', np.shape(pan_np))
+print('The shape of the original PAN:', np.shape(pan_np))
 
 ms4_np = imread('/path/to/ms4.tif')
-print('原始ms4图的形状：', np.shape(ms4_np))
+print('The shape of the original MS:', np.shape(ms4_np))
 
 label_np = np.load("/path/to/label.npy")
-print('label数组形状：', np.shape(label_np))
+print('The shape of the label', np.shape(label_np))
 
 Ms4_patch_size = 16
 Interpolation = cv2.BORDER_REFLECT_101
 top_size, bottom_size, left_size, right_size = (int(Ms4_patch_size / 2 - 1), int(Ms4_patch_size / 2),  # 7  8
                                                 int(Ms4_patch_size / 2 - 1), int(Ms4_patch_size / 2))  # 7  8
 ms4_np = cv2.copyMakeBorder(ms4_np, top_size, bottom_size, left_size, right_size, Interpolation)  # 长宽各扩15
-print('补零后的ms4图的形状：', np.shape(ms4_np))
+print('The shape of the MS after padding:', np.shape(ms4_np))
 
 Pan_patch_size = Ms4_patch_size * 4
 top_size, bottom_size, left_size, right_size = (int(Pan_patch_size / 2 - 4), int(Pan_patch_size / 2),  # 28 32
                                                 int(Pan_patch_size / 2 - 4), int(Pan_patch_size / 2))  # 28 32
 pan_np = cv2.copyMakeBorder(pan_np, top_size, bottom_size, left_size, right_size, Interpolation)  # 长宽各扩60
-print('补零后的pan图的形状：', np.shape(pan_np))
+print('The shape of the PAN after padding:', np.shape(pan_np))
 
 # label_np=label_np.astype(np.uint8)
 label_np = label_np - 1
 
 label_element, element_count = np.unique(label_np, return_counts=True)
-print('类标：', label_element)
-print('各类样本数：', element_count)
+print('Class label:', label_element)
+print('Number of samples in each category:', element_count)
 Categories_Number = len(label_element) - 1
-print('标注的类别数：', Categories_Number)
+print('Number of categories labeled:', Categories_Number)
 label_row, label_column = np.shape(label_np)
 
 def to_tensor(image):
@@ -155,8 +155,8 @@ ground_xy_train = torch.from_numpy(ground_xy_train).type(torch.LongTensor)
 ground_xy_test = torch.from_numpy(ground_xy_test).type(torch.LongTensor)
 ground_xy_allData = torch.from_numpy(ground_xy_allData).type(torch.LongTensor)
 
-print('训练样本数：', len(label_train))
-print('测试样本数：', len(label_test))
+print('Number of training samples:', len(label_train))
+print('Number of test samples:', len(label_test))
 
 
 ms4 = to_tensor(ms4_np)
@@ -180,7 +180,7 @@ class MyData(Dataset):
         x_ms, y_ms = self.gt_xy[index]
         x_pan = int(4 * x_ms)
         y_pan = int(4 * y_ms)
-        # 切出中心点的周围部分区域
+
         image_ms = self.train_data1[:, x_ms:x_ms + self.cut_ms_size,
                    y_ms:y_ms + self.cut_ms_size]  # dim：chw
 
@@ -238,8 +238,6 @@ def train_model(model, train_loader, optimizer, epoch):
     model.train()
     correct = 0.0
     iters = epoch * len(label_train) // BATCH_SIZE
-    print('训练样本数：', len(label_train))
-    print('测试样本数：', len(label_test))
 
     for step, (ms, pan, label, _) in enumerate(train_loader):
         ms, pan, label = ms.to(device), pan.to(device), label.to(device)
@@ -372,8 +370,6 @@ torch.save(model, './transfer_model.pkl')
 cnn = torch.load('./transfer_model.pkl')
 cnn.to(device)
 
-
-# 上色
 class_count = np.zeros(Categories_Number)
 out_clour = np.zeros((label_row, label_column, 3))
 gt_clour = np.zeros((label_row, label_column, 3))
@@ -435,12 +431,11 @@ def clour_model(cnn, all_data_loader):
     cv2.imwrite("/home/gpu/Experiment/gpt/exp/clour_images/beijing.png", out_clour)
     cv2.imwrite("/home/gpu/Experiment/gpt/exp/clour_images/beijing_gt.png", gt_clour)
 
-# 上色
 clour_model(model,  all_data_loader)
 
 
 end=time.time()
-print("程序process_1的运行时间为：{}".format(end-start))
+print("The running time of the program is：{}".format(end-start))
 
 
 print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
