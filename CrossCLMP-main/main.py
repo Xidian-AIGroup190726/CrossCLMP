@@ -52,10 +52,10 @@ def CrossCLMP_main():
 
 
     label_element, element_count = np.unique(label_np, return_counts=True)
-    print('类标：', label_element)
-    print('各类样本数：', element_count)
+    print('Class label:', label_element)
+    print('Number of samples in each category:', element_count)
     Categories_Number = len(label_element) - 1
-    print('标注的类别数：', Categories_Number)
+    print('Number of categories labeled:', Categories_Number)
     label_row, label_column = np.shape(label_np)
 
     def to_tensor(image):
@@ -82,7 +82,7 @@ def CrossCLMP_main():
     length_unlabel = len(unlabeled_xy)
     using_length = length_unlabel * Unlabel_Rate
     unlabeled_xy = unlabeled_xy[0:int(using_length)]
-    print("无标签数据使用了{}组数据".format(len(unlabeled_xy)))
+    print("{} sets of unlabeled data are used".format(len(unlabeled_xy)))
 
     for categories in range(Categories_Number):
         ground_xy[categories] = np.array(ground_xy[categories])
