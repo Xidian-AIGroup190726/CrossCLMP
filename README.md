@@ -1,5 +1,5 @@
 # PyTorch-CrossCLMP
-### PyTorch implementation of "Few-Shot MS and PAN Joint Classification with Improved Cross-Source Contrastive Learning".
+### PyTorch implementation of "Few-Shot MS and PAN Joint Classification with Improved Cross-Source Contrastive Learning". DOI: 10.1109/TGRS.2024.3416298
 
 ![title](./CrossCLMP-main/assets/arch.png)
 
